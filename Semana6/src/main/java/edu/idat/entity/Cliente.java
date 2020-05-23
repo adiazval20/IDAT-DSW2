@@ -1,5 +1,6 @@
 package edu.idat.entity;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
 public class Cliente {
@@ -8,6 +9,7 @@ public class Cliente {
     private String apellidoPaterno;
     private String apellidoMaterno;
     private String nombres;
+    @Min(value = 1900, message = "El año de nacimiento no puede ser menor a 1900")
     private int anioNacimiento;
 
     public Cliente() {
