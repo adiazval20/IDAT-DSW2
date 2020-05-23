@@ -37,7 +37,7 @@ public class ClienteController {
         int index = 0;
         for (ObjectError r : errors.getAllErrors()) {
             if (index > 0) {
-                message += " | " + message;
+                message += " | ";
             }
             message += String.format("Parameter: %s - Message: %s", r.getObjectName(), r.getDefaultMessage());
             index++;
