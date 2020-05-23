@@ -33,17 +33,14 @@ public class ClienteService {
     }
 
     public Cliente save(Cliente c) {
-        Cliente cliente = new Cliente();
         if (c.getId() == 0) {
             c.setId(getNextId());
             clientes.add(c);
         } else {
-            cliente = find(c.getId());
-            int index = clientes.indexOf(cliente);
+            int index = clientes.indexOf(find(c.getId()));
             clientes.set(index, c);
         }
-
-        return cliente;
+        return c;
     }
 
     private int getNextId() {

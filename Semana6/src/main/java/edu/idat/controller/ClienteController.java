@@ -1,11 +1,12 @@
 package edu.idat.controller;
 
 import edu.idat.entity.Cliente;
+import edu.idat.exception.CustomException;
 import edu.idat.service.ClienteService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,5 +21,13 @@ public class ClienteController {
     @GetMapping
     public List<Cliente> list() {
         return service.list();
+    }
+
+    @PostMapping
+    public Cliente create(@Valid @RequestBody Cliente cliente, Errors errors) {
+        if (errors.hasErrors()) {
+            throw new CustomException("ENCONTRÉ UN ERROR!");
+        }
+        return service.save(cliente);
     }
 }

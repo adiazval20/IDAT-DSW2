@@ -1,7 +1,10 @@
 package edu.idat.entity;
 
+import javax.validation.constraints.NotEmpty;
+
 public class Cliente {
     private int id;
+    @NotEmpty(message = "El apellido paterno no puede estar vacío")
     private String apellidoPaterno;
     private String apellidoMaterno;
     private String nombres;
