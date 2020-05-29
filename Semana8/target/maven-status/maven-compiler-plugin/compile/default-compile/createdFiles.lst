@@ -1,0 +1,7 @@
+edu\idat\controller\ClienteController.class
+edu\idat\exception\CustomException.class
+edu\idat\exception\ErrorMessage.class
+edu\idat\service\ClienteService.class
+edu\idat\exception\ControllerAdvisor.class
+edu\idat\entity\Cliente.class
+edu\idat\Aplicacion.class
