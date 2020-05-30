@@ -25,7 +25,7 @@ public class ClienteController {
     }
 
     @GetMapping("/{id}")
-    public Cliente find(int id) {
+    public Cliente find(@PathVariable int id) {
         return service.find(id);
     }
 
