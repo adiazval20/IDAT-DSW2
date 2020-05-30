@@ -13,7 +13,7 @@ public class ClienteService {
     }
 
     public Iterable<Cliente> list() {
-        return repository.findAll();
+        return repository.listar();
     }
 
     public Cliente find(int id) {
@@ -25,6 +25,10 @@ public class ClienteService {
     }
 
     public void delete(int id) {
-        repository.deleteById(id);
+        Cliente cliente = repository.findById(id).orElse(new Cliente());
+        if (cliente.getId() != 0) {
+            cliente.setEliminado(true);
+            repository.save(cliente);
+        }
     }
 }

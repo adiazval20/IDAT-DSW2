@@ -18,6 +18,8 @@ public class Cliente {
 
     private String nombres;
 
+    private boolean eliminado;
+
     @Min(value = 1900, message = "El año de nacimiento no puede ser menor a 1900")
     private int anioNacimiento;
 
@@ -30,6 +32,7 @@ public class Cliente {
         this.apellidoMaterno = apellidoMaterno;
         this.nombres = nombres;
         this.anioNacimiento = anioNacimiento;
+        this.eliminado = false;
     }
 
     public int getId() {
@@ -70,5 +73,13 @@ public class Cliente {
 
     public void setAnioNacimiento(int anioNacimiento) {
         this.anioNacimiento = anioNacimiento;
+    }
+
+    public boolean isEliminado() {
+        return eliminado;
+    }
+
+    public void setEliminado(boolean eliminado) {
+        this.eliminado = eliminado;
     }
 }
