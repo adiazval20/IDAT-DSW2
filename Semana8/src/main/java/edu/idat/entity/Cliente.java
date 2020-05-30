@@ -1,14 +1,23 @@
 package edu.idat.entity;
 
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
+@Entity
 public class Cliente {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(length = 150)
     @NotEmpty(message = "El apellido paterno no puede estar vacío")
     private String apellidoPaterno;
+
     private String apellidoMaterno;
+
     private String nombres;
+
     @Min(value = 1900, message = "El año de nacimiento no puede ser menor a 1900")
     private int anioNacimiento;
 
