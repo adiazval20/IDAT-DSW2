@@ -24,12 +24,31 @@ public class ClienteController {
         return service.list();
     }
 
+    @GetMapping("/{id}")
+    public Cliente find(int id) {
+        return service.find(id);
+    }
+
     @PostMapping
     public Cliente create(@Valid @RequestBody Cliente cliente, Errors errors) {
         if (errors.hasErrors()) {
             throwError(errors);
         }
         return service.save(cliente);
+    }
+
+    @PutMapping("/{id}")
+    public Cliente update(@PathVariable int id, @Valid @RequestBody Cliente cliente, Errors errors) {
+        if (errors.hasErrors()) {
+            throwError(errors);
+        }
+        cliente.setId(id);
+        return service.save(cliente);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable int id) {
+        service.delete(id);
     }
 
     private void throwError(Errors errors) {
