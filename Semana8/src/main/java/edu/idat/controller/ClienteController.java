@@ -20,7 +20,7 @@ public class ClienteController {
     }
 
     @GetMapping
-    public List<Cliente> list() {
+    public Iterable<Cliente> list() {
         return service.list();
     }
 
