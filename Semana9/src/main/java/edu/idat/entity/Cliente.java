@@ -1,6 +1,7 @@
 package edu.idat.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
@@ -32,7 +33,7 @@ public class Cliente {
     @NotNull
     private boolean eliminado;
 
-    @JsonManagedReference
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private List<Telefono> telefonos;
 

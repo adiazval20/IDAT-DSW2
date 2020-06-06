@@ -1,6 +1,7 @@
 package edu.idat.controller;
 
 import edu.idat.entity.Cliente;
+import edu.idat.entity.ClienteTelefonoDTO;
 import edu.idat.exception.CustomException;
 import edu.idat.service.ClienteService;
 import org.springframework.validation.Errors;
@@ -27,6 +28,11 @@ public class ClienteController {
     @GetMapping("/{id}")
     public Cliente find(@PathVariable int id) {
         return service.find(id);
+    }
+
+    @GetMapping("/conTelefono/{id}")
+    public ClienteTelefonoDTO findWithTelefono(@PathVariable int id) {
+        return service.listClienteTelefonoDTO(id);
     }
 
     @PostMapping

@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Semana6" target="8" />
+      <module name="Semana6" target="9" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
