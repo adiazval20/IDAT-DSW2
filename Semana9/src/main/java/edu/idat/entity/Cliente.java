@@ -3,6 +3,7 @@ package edu.idat.entity;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,13 +17,16 @@ public class Cliente {
     @NotEmpty(message = "El apellido paterno no puede estar vacío")
     private String apellidoPaterno;
 
+    @NotEmpty(message = "El apellido materno no puede estar vacío")
     private String apellidoMaterno;
 
+    @NotEmpty(message = "Debe indicar los nombres del cliente")
     private String nombres;
 
     @Min(value = 1900, message = "El año de nacimiento no puede ser menor a 1900")
     private int anioNacimiento;
 
+    @NotNull
     private boolean eliminado;
 
     @OneToMany(mappedBy = "cliente")
