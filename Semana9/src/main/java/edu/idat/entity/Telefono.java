@@ -1,5 +1,7 @@
 package edu.idat.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -27,6 +29,7 @@ public class Telefono {
     @NotNull
     private boolean eliminado;
 
+    @JsonBackReference
     @ManyToOne
     private Cliente cliente;
 
