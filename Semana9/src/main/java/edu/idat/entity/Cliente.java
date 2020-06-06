@@ -3,6 +3,8 @@ package edu.idat.entity;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Cliente {
@@ -18,12 +20,22 @@ public class Cliente {
 
     private String nombres;
 
-    private boolean eliminado;
-
     @Min(value = 1900, message = "El año de nacimiento no puede ser menor a 1900")
     private int anioNacimiento;
 
+    private boolean eliminado;
+
+    @OneToMany(mappedBy = "cliente")
+    private List<Telefono> telefonos;
+
     public Cliente() {
+        this.id = 0;
+        this.apellidoPaterno = "";
+        this.apellidoMaterno = "";
+        this.nombres = "";
+        this.anioNacimiento = 0;
+        this.eliminado = false;
+        this.telefonos = new ArrayList<>();
     }
 
     public Cliente(int id, String apellidoPaterno, String apellidoMaterno, String nombres, int anioNacimiento) {
@@ -33,6 +45,7 @@ public class Cliente {
         this.nombres = nombres;
         this.anioNacimiento = anioNacimiento;
         this.eliminado = false;
+        this.telefonos = new ArrayList<>();
     }
 
     public int getId() {
@@ -81,5 +94,13 @@ public class Cliente {
 
     public void setEliminado(boolean eliminado) {
         this.eliminado = eliminado;
+    }
+
+    public List<Telefono> getTelefonos() {
+        return telefonos;
+    }
+
+    public void setTelefonos(List<Telefono> telefonos) {
+        this.telefonos = telefonos;
     }
 }
