@@ -15,6 +15,7 @@ import java.util.Optional;
 import static edu.idat.eventosvirtuales.utils.Global.*;
 
 @Service
+@Transactional
 public class UsuarioService implements BaseService<Usuario, Long> {
     private UsuarioRepository repo;
     private PersonaRepository perRepo;
@@ -78,6 +79,7 @@ public class UsuarioService implements BaseService<Usuario, Long> {
 
         if (errors.size() == 0 && errorsPersona.size() == 0) {
             persona = perRepo.save(persona);
+
             usuario.setPersona(persona);
             usuario = repo.save(usuario);
 
