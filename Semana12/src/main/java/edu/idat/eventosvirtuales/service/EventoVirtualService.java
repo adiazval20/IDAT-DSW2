@@ -1,6 +1,7 @@
 package edu.idat.eventosvirtuales.service;
 
 import edu.idat.eventosvirtuales.entity.EventoVirtual;
+import edu.idat.eventosvirtuales.entity.Persona;
 import edu.idat.eventosvirtuales.repository.EventoVirtualRepository;
 import edu.idat.eventosvirtuales.utils.GenericResponse;
 import org.aspectj.weaver.ResolvedPointcutDefinition;
@@ -15,9 +16,11 @@ import static edu.idat.eventosvirtuales.utils.Global.*;
 @Service
 public class EventoVirtualService implements BaseService<EventoVirtual, Long> {
     private EventoVirtualRepository repo;
+    private PersonaService perServ;
 
-    public EventoVirtualService(EventoVirtualRepository repo) {
+    public EventoVirtualService(EventoVirtualRepository repo, PersonaService perServ) {
         this.repo = repo;
+        this.perServ = perServ;
     }
 
     @Override
@@ -41,11 +44,20 @@ public class EventoVirtualService implements BaseService<EventoVirtual, Long> {
     @Override
     public GenericResponse save(EventoVirtual obj) {
         GenericResponse response = new GenericResponse();
+        HashMap<String, Object> errors, ponenteErrors;
+
         response.setType(TIPO_DATA);
 
-        HashMap<String, Object> errors = validate(obj);
-        if (errors.size() == 0) {
+        Persona ponente = perServ.find(obj.getPonente().getId()).orElse(obj.getPonente());
+
+        errors = validate(obj);
+        ponenteErrors = perServ.validate(obj.getPonente());
+
+        if (errors.size() == 0 && ponenteErrors.size() == 0) {
+            ponente = perServ.save(ponente);
+            obj.setPonente(ponente);
             obj = repo.save(obj);
+
             response.setRpta(RPTA_OK);
             response.setMessage(OPERACION_CORRECTA);
             response.setBody(obj);
