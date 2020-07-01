@@ -24,4 +24,9 @@ public class SpecificExceptionHandler {
     public GenericResponse validException(MethodArgumentNotValidException ex) {
         return new GenericResponse("valid-exception", RPTA_WARNING, OPERACION_ERRONEA, ex.getMessage());
     }
+
+    @ExceptionHandler(FileStorageException.class)
+    public GenericResponse fileStorageException(FileStorageException ex) {
+        return new GenericResponse("file-storage-exception", RPTA_WARNING, OPERACION_ERRONEA, ex.getMessage());
+    }
 }
