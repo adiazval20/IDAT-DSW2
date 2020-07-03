@@ -2,11 +2,15 @@ package edu.idat.eventosvirtuales.service;
 
 import edu.idat.eventosvirtuales.config.FileStorageProperties;
 import edu.idat.eventosvirtuales.exception.FileStorageException;
+import edu.idat.eventosvirtuales.exception.MyFileNotFoundException;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -44,4 +48,35 @@ public class FileStorageService {
             throw new FileStorageException("No se pudo almacenar el archivo", e);
         }
     }
+
+    public Resource loadResource(String fileName) {
+        Path path = this.fileStorageLocation.resolve(fileName).normalize();
+        try {
+            Resource resource = new UrlResource(path.toUri());
+            if (resource.exists()) {
+                return resource;
+            } else {
+                throw new MyFileNotFoundException("Archivo no encontrado: " + fileName);
+            }
+
+        } catch (MalformedURLException e) {
+            throw new MyFileNotFoundException("Ha ocurrido un error al intentar acceder al archivo: " + fileName, e);
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
