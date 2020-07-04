@@ -3,10 +3,7 @@ package edu.idat.eventosvirtuales.controller;
 import edu.idat.eventosvirtuales.entity.DocumentoAlmacenado;
 import edu.idat.eventosvirtuales.service.DocumentoAlmacenadoService;
 import edu.idat.eventosvirtuales.utils.GenericResponse;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/documento-almacenado")
@@ -30,8 +27,9 @@ public class DocumentoAlmacenadoController implements BaseController<DocumentoAl
     }
 
     @Override
-    public GenericResponse save(DocumentoAlmacenado obj) {
-        return null;
+    @PostMapping
+    public GenericResponse save(@ModelAttribute DocumentoAlmacenado obj) {
+        return service.save(obj);
     }
 
     @Override

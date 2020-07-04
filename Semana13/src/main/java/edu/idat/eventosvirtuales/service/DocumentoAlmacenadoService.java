@@ -33,7 +33,17 @@ public class DocumentoAlmacenadoService implements BaseService<DocumentoAlmacena
 
     @Override
     public GenericResponse save(DocumentoAlmacenado obj) {
-        return null;
+        String fileName = (repo.findById(obj.getId())).orElse(new DocumentoAlmacenado()).getFileName();
+
+        String originalFilename = obj.getFile().getOriginalFilename();
+        String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+
+        fileName = storageService.storeFile(obj.getFile(), fileName);
+
+        obj.setFileName(fileName);
+        obj.setExtension(extension);
+
+        return new GenericResponse(TIPO_DATA, RPTA_OK,OPERACION_CORRECTA,repo.save(obj));
     }
 
     @Override
