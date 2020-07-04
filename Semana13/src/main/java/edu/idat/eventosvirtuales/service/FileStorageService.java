@@ -1,6 +1,7 @@
 package edu.idat.eventosvirtuales.service;
 
 import edu.idat.eventosvirtuales.config.FileStorageProperties;
+import edu.idat.eventosvirtuales.entity.DocumentoAlmacenado;
 import edu.idat.eventosvirtuales.exception.FileStorageException;
 import edu.idat.eventosvirtuales.exception.MyFileNotFoundException;
 import org.springframework.core.io.Resource;
@@ -19,16 +20,10 @@ import java.util.UUID;
 
 @Service
 public class FileStorageService {
-    private Path fileStorageLocation;
+    private FileStorageProperties fileStorageProperties;
 
     public FileStorageService(FileStorageProperties fileStorageProperties) {
-        fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize();
-
-        try {
-            Files.createDirectories(fileStorageLocation);
-        } catch (IOException e) {
-            throw new FileStorageException("No se pudo crear el directorio", e);
-        }
+        this.fileStorageProperties = fileStorageProperties;
     }
 
     public String storeFile(MultipartFile file, String fileName) {
@@ -39,6 +34,7 @@ public class FileStorageService {
             fileName = UUID.randomUUID().toString();
         }
 
+        Path fileStorageLocation = getFileStorageLocation(getFolderName(originalName));
         Path targetLocation = fileStorageLocation.resolve(fileName + extension);
         try {
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
@@ -49,18 +45,34 @@ public class FileStorageService {
         }
     }
 
-    public Resource loadResource(String fileName) {
-        Path path = this.fileStorageLocation.resolve(fileName).normalize();
+    private String getFolderName(String completeFileName) {
+        String extension = completeFileName.substring(completeFileName.lastIndexOf("."));
+        return extension.replace(".", "").toUpperCase();
+    }
+
+    private Path getFileStorageLocation(String folderName) {
+        Path fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir() + "/" + folderName).toAbsolutePath().normalize();
+        try {
+            Files.createDirectories(fileStorageLocation);
+            return fileStorageLocation;
+        } catch (IOException e) {
+            throw new FileStorageException("No se pudo crear el directorio", e);
+        }
+    }
+
+    public Resource loadResource(String completeFileName) {
+        Path fileStorageLocation = getFileStorageLocation(getFolderName(completeFileName));
+        Path path = fileStorageLocation.resolve(completeFileName).normalize();
         try {
             Resource resource = new UrlResource(path.toUri());
             if (resource.exists()) {
                 return resource;
             } else {
-                throw new MyFileNotFoundException("Archivo no encontrado: " + fileName);
+                throw new MyFileNotFoundException("Archivo no encontrado: " + completeFileName);
             }
 
         } catch (MalformedURLException e) {
-            throw new MyFileNotFoundException("Ha ocurrido un error al intentar acceder al archivo: " + fileName, e);
+            throw new MyFileNotFoundException("Ha ocurrido un error al intentar acceder al archivo: " + completeFileName, e);
         }
     }
 }
