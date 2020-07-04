@@ -3,7 +3,11 @@ package edu.idat.eventosvirtuales.controller;
 import edu.idat.eventosvirtuales.entity.DocumentoAlmacenado;
 import edu.idat.eventosvirtuales.service.DocumentoAlmacenadoService;
 import edu.idat.eventosvirtuales.utils.GenericResponse;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("api/documento-almacenado")
@@ -24,6 +28,11 @@ public class DocumentoAlmacenadoController implements BaseController<DocumentoAl
     @GetMapping("/{id}")
     public GenericResponse find(@PathVariable Long id) {
         return null;
+    }
+
+    @GetMapping("/download/{fileName}")
+    public ResponseEntity<Resource> download(@PathVariable String fileName, HttpServletRequest request) {
+        return service.downloadByFileName(fileName, request);
     }
 
     @Override

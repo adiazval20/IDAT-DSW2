@@ -3,9 +3,16 @@ package edu.idat.eventosvirtuales.service;
 import edu.idat.eventosvirtuales.entity.DocumentoAlmacenado;
 import edu.idat.eventosvirtuales.repository.DocumentoAlmacenadoRepository;
 import edu.idat.eventosvirtuales.utils.GenericResponse;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.HashMap;
 
 import static edu.idat.eventosvirtuales.utils.Global.*;
@@ -44,6 +51,31 @@ public class DocumentoAlmacenadoService implements BaseService<DocumentoAlmacena
         obj.setExtension(extension);
 
         return new GenericResponse(TIPO_DATA, RPTA_OK,OPERACION_CORRECTA,repo.save(obj));
+    }
+
+    public ResponseEntity<Resource> download(String completefileName, HttpServletRequest request) {
+        Resource resource = storageService.loadResource(completefileName);
+        String contentType = null;
+
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
+    public ResponseEntity<Resource> downloadByFileName(String fileName, HttpServletRequest request) {
+        DocumentoAlmacenado doc = repo.findByFileName(fileName).orElse(new DocumentoAlmacenado());
+        return download(doc.getCompleteFileName(), request);
     }
 
     @Override

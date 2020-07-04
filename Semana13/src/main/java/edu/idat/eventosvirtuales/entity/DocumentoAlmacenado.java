@@ -100,4 +100,8 @@ public class DocumentoAlmacenado {
     public void setUrlFile(String urlFile) {
         this.urlFile = urlFile;
     }
+
+    public String getCompleteFileName() {
+        return fileName + extension;
+    }
 }
