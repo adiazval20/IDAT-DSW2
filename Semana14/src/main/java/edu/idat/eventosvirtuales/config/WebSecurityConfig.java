@@ -18,6 +18,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/usuario/auth").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/usuario/persona").permitAll()
+                .antMatchers("/api/evento-virtual/**").hasRole("USER")
                 .anyRequest().authenticated();
     }
 }
