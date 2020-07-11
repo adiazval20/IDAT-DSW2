@@ -2,21 +2,21 @@ package edu.idat.eventosvirtuales.service;
 
 import edu.idat.eventosvirtuales.dto.UsuarioPersonaDTO;
 import edu.idat.eventosvirtuales.entity.Persona;
+import edu.idat.eventosvirtuales.entity.Rol;
 import edu.idat.eventosvirtuales.entity.Usuario;
 import edu.idat.eventosvirtuales.repository.PersonaRepository;
+import edu.idat.eventosvirtuales.repository.RolRepository;
 import edu.idat.eventosvirtuales.repository.UsuarioRepository;
 import edu.idat.eventosvirtuales.utils.GenericResponse;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static edu.idat.eventosvirtuales.utils.Global.*;
@@ -24,13 +24,15 @@ import static edu.idat.eventosvirtuales.utils.Global.*;
 @Service
 @Transactional
 public class UsuarioService implements BaseService<Usuario, Long> {
-    private UsuarioRepository repo;
-    private PersonaRepository perRepo;
-    private PersonaService perServ;
+    private final UsuarioRepository repo;
+    private final PersonaRepository perRepo;
+    private final RolRepository rolRepo;
+    private final PersonaService perServ;
 
-    public UsuarioService(UsuarioRepository repo, PersonaRepository perRepo, PersonaService perServ) {
+    public UsuarioService(UsuarioRepository repo, PersonaRepository perRepo, RolRepository rolRepo, PersonaService perServ) {
         this.repo = repo;
         this.perRepo = perRepo;
+        this.rolRepo = rolRepo;
         this.perServ = perServ;
     }
 
@@ -130,7 +132,11 @@ public class UsuarioService implements BaseService<Usuario, Long> {
     }
 
     private String getToken(String username) {
-        List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ROLE_USER");
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        List<Rol> rols = (List<Rol>) rolRepo.findByUsername(username);
+        for (Rol rol : rols) {
+            authorities.add(new SimpleGrantedAuthority(rol.getNombre()));
+        }
 
         return Jwts
                 .builder()
