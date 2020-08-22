@@ -48,6 +48,9 @@ public class EventoVirtual {
     @OneToMany(mappedBy = "eventoVirtual")
     private List<InscripcionEventoVirtual> inscripcionEventoVirtuals;
 
+    @ManyToOne
+    private Ubicacion ubicacion;
+
     public EventoVirtual() {
         this.id = 0L;
         this.nombre = "";
@@ -140,5 +143,13 @@ public class EventoVirtual {
 
     public void setInscripcionEventoVirtuals(List<InscripcionEventoVirtual> inscripcionEventoVirtuals) {
         this.inscripcionEventoVirtuals = inscripcionEventoVirtuals;
+    }
+
+    public Ubicacion getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(Ubicacion ubicacion) {
+        this.ubicacion = ubicacion;
     }
 }

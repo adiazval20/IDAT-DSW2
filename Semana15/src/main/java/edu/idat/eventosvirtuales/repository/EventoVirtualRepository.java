@@ -19,4 +19,8 @@ public interface EventoVirtualRepository extends CrudRepository<EventoVirtual, L
             "WHERE ev.fechaHoraFin < :fechaHora AND ev.estado = 'A' AND ev.eliminado = false " +
             "ORDER BY ev.fechaHoraInicio DESC")
     Iterable<EventoVirtual> listPasados(Date fechaHora);
+
+    @Query("SELECT ev FROM EventoVirtual ev " +
+            "WHERE ev.ubicacion.distrito.id = :distritoId")
+    Iterable<EventoVirtual> listByDistrito(long distritoId);
 }
